@@ -19,7 +19,7 @@ Para realizar este proyecto he trabajado en la nube de Amazon Web Services (AWS)
 
 ## El Problema de Negocio (Sector Inmobiliario)
 
-El ejercicio se basa en un caso real del sector inmobiliario. Contamos con una tabla de datos (dataset) que incluye información de muchas viviendas: su ubicación, los años que tiene el edificio, cuántas habitaciones tiene y el nivel económico de los vecinos de la zona. 
+El ejercicio se basa en un caso real del sector inmobiliario. Contamos con una tabla de datos (dataset) que incluye información de muchas viviendas: su ubicación por coordenadas, la antigüedad del edificio, el número de habitaciones, los dormitorios y el nivel económico de los vecinos de la zona. 
 
 El objetivo es entrenar al sistema para que aprenda la relación que hay entre todos esos datos y sea capaz de calcular, de forma automática, el precio de una casa. 
 
@@ -41,21 +41,24 @@ Como no podía cambiar los permisos de la cuenta, decidí solucionar el problema
 ![Instancia de Cuaderno Activa](img/01-instancia-cuaderno.png)
 
 ### 2. Carga de Datos y Gráfica de Relaciones
-Una vez dentro de JupyterLab, abrí un archivo nuevo de Python 3 y cargué la tabla con los datos de las viviendas. Para entender mejor la información antes de entrenar al sistema, utilicé una librería gráfica llamada `seaborn` para pintar un mapa de calor. Esta gráfica muestra de forma visual qué características influyen más en que una casa sea más cara o más barata (por ejemplo, si influye más el sueldo de la zona o el número de habitaciones).
+Una vez dentro de JupyterLab, subí el archivo `housing.csv` del taller, abrí un archivo nuevo de Python 3 y cargué la tabla con los datos. Como la máquina venía totalmente limpia de fábrica, lo primero que tuve que hacer fue instalar las librerías necesarias ejecutando los comandos `!pip install seaborn` y `!pip install scikit-learn` directamente en las celdas.
+
+Para entender mejor la información antes de entrenar al sistema, pinté un mapa de calor. Esta gráfica muestra de forma visual qué características influyen más en que una casa sea más cara o más barata. Al mirar los resultados, se ve claro que la columna `median_income` (el sueldo de la zona) es la que más fuerza tiene a la hora de subir el precio de la vivienda (`median_house_value`), con un valor de 0.69.
 
 ```python
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-# Carga de los datos de las viviendas
-from sklearn.datasets import fetch_california_housing
-housing = fetch_california_housing(as_frame=True)
-df = housing.frame
+# 1. Cargamos el archivo CSV oficial del taller de AWS
+df = pd.read_csv('housing.csv')
 
-# Creación de la gráfica de relaciones
+# 2. Mostramos en pantalla las primeras 3 filas para comprobar los datos
+print("Primeras filas del archivo del taller:")
+print(df.head(3))
+
+# 3. Dibujamos el mapa de calor usando solo las columnas numéricas
 plt.figure(figsize=(10, 6))
-sns.heatmap(df.corr(), annot=True, cmap='Dark2', fmt='.2f')
-plt.title('Matriz de Correlación de Variables Inmobiliarias')
+sns.heatmap(df.corr(numeric_only=True), annot=True, cmap='Dark2', fmt='.2f')
+plt.title('Matriz de Correlación - Dataset Oficial de AWS')
 plt.show()
-
