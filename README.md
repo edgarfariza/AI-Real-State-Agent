@@ -4,8 +4,7 @@
 
 # Predicción de precios de viviendas con Amazon SageMaker
 
-
-Este proyecto forma parte de mi formación en Cloud Computing. El objetivo inicial era utilizar Amazon SageMaker Canvas, una herramienta visual que permite crear modelos de Inteligencia Artificial sin escribir código, para adivinar el precio de las viviendas en función de sus características (como el número de habitaciones o la zona donde se encuentran). 
+Este proyecto forma parte de mi formación en Cloud Computing. El objetivo inicial era utilizar Amazon SageMaker Canvas, una herramienta visual que permite crear modelos de Inteligencia Artificial sin escribir código, para adivinar el precio de las viviendas en función de sus características (como el número de habitaciones o la zona donde se encuentran).
 
 El propósito de este repositorio es explicar los problemas que encontré con los permisos de la cuenta de AWS, cómo los solucioné cambiando de estrategia y el código que utilicé para crear el modelo definitivo.
 
@@ -24,25 +23,17 @@ Para realizar este proyecto he trabajado en la nube de Amazon Web Services (AWS)
 ## Cómo ejecutarlo localmente
 
 ```bash
-git clone https://github.com/edgarfariza/AI-Real-Estate-Agent.git
-cd AI-Real-Estate-Agent
+git clone https://github.com/edgarfariza/AI-Real-State-Agent.git
+cd AI-Real-State-Agent
 pip install -r requirements.txt
 jupyter notebook notebook/prediccion_viviendas.ipynb
 ```
 
-## Próximos Pasos (Lo que se viene este verano)
-
-El motor de predicción en el Jupyter Notebook ya funciona perfectamente. Como el objetivo es seguir aprendiendo y llevar este proyecto al siguiente nivel, estas son las mejoras en las que estoy trabajando:
-
-* **Crear un Bot de Telegram:** Quiero que cualquiera pueda usar el modelo desde el móvil. La idea es pasarle los datos de una casa por el chat y que el bot te devuelva el precio estimado al instante.
-* **Limpar y organizar el código:** Pasar la lógica del Notebook a archivos limpios de Python (`.py`) y guardar el modelo ya entrenado en un archivo para que el bot lo cargue superrápido sin tener que reentrenarlo cada vez.
-* **Montarlo en un servidor (Linux):** Desplegar el script del bot en un servidor para que se quede corriendo en segundo plano y funcione las 24 horas del día, aplicando buenas prácticas para ocultar las claves de la API de Telegram de forma segura.
-  
 ## El Problema de Negocio (Sector Inmobiliario)
 
-El ejercicio se basa en un caso real del sector inmobiliario. Contamos con una tabla de datos (dataset) que incluye información de muchas viviendas: su ubicación por coordenadas, la antigüedad del edificio, el número de habitaciones, los dormitorios y el nivel económico de los vecinos de la zona. 
+El ejercicio se basa en un caso real del sector inmobiliario. Contamos con una tabla de datos (dataset) que incluye información de muchas viviendas: su ubicación por coordenadas, la antigüedad del edificio, el número de habitaciones, los dormitorios y el nivel económico de los vecinos de la zona.
 
-El objetivo es entrenar al sistema para que aprenda la relación que hay entre todos esos datos y sea capaz de calcular, de forma automática, el precio de una casa. 
+El objetivo es entrenar al sistema para que aprenda la relación que hay entre todos esos datos y sea capaz de calcular, de forma automática, el precio de una casa.
 
 ### Utilidad para una Empresa:
 Tener un modelo que calcule los precios de forma automática permite a una inmobiliaria:
@@ -55,7 +46,7 @@ Tener un modelo que calcule los precios de forma automática permite a una inmob
 ## Desarrollo Paso a Paso
 
 ### 1. Bloqueo de Permisos y Cambio de Estrategia
-Al intentar abrir la herramienta visual SageMaker Canvas dentro del laboratorio de la universidad, el sistema me denegó el acceso con un error de tipo `AccessDeniedException`. Esto ocurrió porque las cuentas de estudiante vienen muy limitadas de fábrica y no tienen permisos para activar ciertas opciones de usuario en AWS (como el Identity Center o el Resource Access Manager).
+Al intentar abrir la herramienta visual SageMaker Canvas dentro del laboratorio de la universidad, el sistema me denegó el acceso con dos errores `AccessDeniedException` sucesivos, mostrados en las capturas. El primero fue sobre `datazone:ListDomains`, necesario para que Canvas liste los dominios de Amazon DataZone que usa internamente. Al buscar una vía alternativa, me topé con una segunda restricción: la cuenta tampoco tiene permiso para `sso:ListInstances` dentro de AWS IAM Identity Center, que Canvas también necesita para gestionar el acceso a los espacios de trabajo. Esto ocurrió porque las cuentas de estudiante del laboratorio vienen muy limitadas de fábrica y no tienen activadas estas opciones de gestión de usuarios.
 
 ![AccessDeniedException1](img/AccessDeniedException.png)
 ![AccessDeniedException2](img/AccessDeniedException2.png)
@@ -90,9 +81,9 @@ plt.show()
 ![Gráfico Dataset](img/02-grafico-dataset.png)
 
 ### 3. Entrenamiento del Modelo de Predicción
-Para poder entrenar al sistema, primero tuve que hacer una pequeña limpieza en la tabla de datos. Eliminé las filas que tenían celdas vacías en la columna de los dormitorios (`total_bedrooms`) para evitar que el código diera errores de compilación. Además, quité la columna `ocean_proximity` porque contiene texto (como "NEAR BAY") y los modelos predictivos solo entienden de números.
+Para poder entrenar al sistema, primero tuve que hacer una pequeña limpieza en la tabla de datos. Eliminé las filas que tenían celdas vacías en la columna de los dormitorios (`total_bedrooms`) para evitar que el código diera errores de compilación. Además, quité la columna ocean_proximity porque contiene texto y los modelos matemáticos solo entienden números. Una mejora futura sería codificarla numéricamente (por ejemplo, mediante one-hot encoding) en lugar de eliminarla, ya que la cercanía al mar suele tener un peso real en el precio de la vivienda y probablemente habría mejorado el R² del modelo.
 
-Después, separé los datos en dos grupos: utilicé el 80% de las casas para que el algoritmo estudiara las características y aprendiera los precios, y me guardé el 20% restante bloqueado para poder hacerle un examen final al sistema más adelante. 
+Después, separé los datos en dos grupos: utilicé el 80% de las casas para que el algoritmo estudiara las características y aprendiera los precios, y me guardé el 20% restante bloqueado para poder hacerle un examen final al sistema más adelante.
 
 Para este proyecto utilicé un algoritmo clásico llamado **Regresión Lineal**. Básicamente, lo que hace este algoritmo es analizar todas las variables numéricas de entrada (los ingresos de la zona, las habitaciones, la antigüedad...) y trazar una línea de tendencia recta para calcular de forma automatizada el precio final de la vivienda (`median_house_value`). A nivel de código, es programación pura orientada a objetos: instanciamos un objeto de la clase `LinearRegression` y llamamos a su método `.fit()` pasándole los datos de entrenamiento por parámetro.
 
@@ -119,8 +110,8 @@ print("¡Modelo entrenado con éxito usando los datos del taller!")
 ### 4. Examen del Modelo y Resultados de Precisión
 Para comprobar si el sistema había aprendido correctamente, le pasé las casas del grupo de examen (el 20%) para que intentara calcular sus precios sin ver la solución. Al comparar sus predicciones con los precios reales del mercado, el script calculó las dos notas de rendimiento finales:
 
-* **Error Cuadrático Medio (MSE):** Mide la media de los fallos del modelo elevados al cuadrado. Cuanto más bajo sea este valor, más cerca habrán estado las predicciones de los precios reales.
-* **Coeficiente de Determinación (R2 Score):** Es la nota de examen del modelo en una escala del 0 al 1. Nuestro script devuelve un valor de **0.6401**, lo que significa que este código en Python tiene un **64% de acierto general** a la hora de estimar el valor de las viviendas utilizando los datos del taller de AWS.
+* **Error Cuadrático Medio (MSE):** al principio este número me costó interpretarlo porque sale en una escala enorme (más de 4.900 millones), y tardé en entender que eso es normal cuando trabajas con precios de viviendas elevados al cuadrado. Lo que me quedó claro es que sirve sobre todo para comparar: si en el futuro entreno otro modelo con los mismos datos, el que tenga un MSE más bajo será el que se equivoque menos.
+* **Coeficiente de Determinación (R2 Score):** este me resultó más fácil de entender porque va de 0 a 1, como una nota de examen. Mi script devolvió 0.6401, así que decidí interpretarlo como que el modelo explica el 64% de las variaciones en el precio de la vivienda a partir de las variables que le di. El otro 36% se debe a factores que el modelo no está capturando bien (probablemente la ubicación exacta o la variable de proximidad al mar que terminé descartando).
 
 ```python
 from sklearn.metrics import mean_squared_error, r2_score
@@ -166,11 +157,10 @@ plt.show()
 
 ### Gráfica 1: Comparativa de Realidad vs Predicción.
 
-Esta gráfica nos representa cada casa del grupo del examen con un punto azul. La linea roja discontinua representa la franja donde el precio real y el precio adivinado coinciden exactamente.
-Al ver que la nube de puntos azules se agrupa siguiendo la dirección de la línea roja, confirmamos visualmente que el modelo sigue la tendencia real del mercado. Si los puntos estuvieran completamente dispersos como una diana rota, significaría que el modelo estaría calculando los precios al azar.
+Cada punto azul es una casa del grupo de examen, y la línea roja discontinua marca dónde caería el punto si el modelo hubiera adivinado el precio exacto. Lo primero que hice al ver esta gráfica fue buscar si los puntos seguían más o menos esa línea o si estaban totalmente desordenados; al comprobar que se agrupan siguiendo su dirección, entendí que el modelo sí está aprendiendo una tendencia real y no generando números al azar. También me di cuenta de que la dispersión es mayor en las casas más caras (por encima de 350.000), lo que tiene sentido porque el modelo tiene menos ejemplos de viviendas de lujo con los que aprender.
 
 ### Gráfica 2: Distribución de los Errores
-Esta gráfica nos muestra cuanto se desvían las predicciones del modelo respecto a la línea roja discontinua central, que representa el cero.
+Esta gráfica nos muestra cuánto se desvían las predicciones del modelo respecto a la línea roja discontinua central, que representa el cero.
 La gráfica tiene forma de campana y la mayoría de los datos se concentran alrededor de la línea central. Esto es una excelente señal técnica, ya que demuestra que la gran mayoría de los errores del algoritmo son pequeños (cercanos a cero) y que el modelo no tiene un sesgo grave que le haga calcular siempre los precios al alza o a la baja.
 
 ## Limpieza de la Cuenta
@@ -179,7 +169,7 @@ Para cumplir con las buenas prácticas de administración en la nube, optimizar 
 
 1. Guardé los cambios del cuaderno `.ipynb` y cerré el entorno de JupyterLab.
 2. Volví al panel de control de Amazon SageMaker, seleccioné mi instancia de cuaderno (`sagemaker-realestate-efac`) y utilicé el botón **Acciones -> Detener (Stop)**.
-3. Confirmé que el estado de la máquina cambió de `InService` a `Stopped`, garantizando así el coste cero en la cuenta del laboratorio tras la realización de las capturas de pantalla de este proyecto.
+3. Confirmé que el estado de la máquina cambió de `InService` a `Stopped`, eliminando el coste de cómputo asociado a la instancia. Cabe matizar que el volumen de almacenamiento (EBS) asociado al notebook permanece activo mientras la instancia no se elimine por completo, por lo que para un coste estrictamente cero sería necesario borrar la instancia (Delete) una vez confirmado que ya no se necesita.
 
 ![Instancia del cuaderno parada](img/05-instancia-stopped.png)
 
@@ -191,8 +181,8 @@ Este proyecto me ha servido para comprobar que las herramientas visuales sin có
 ### 2. Investigación de Conceptos de Machine Learning
 Al cambiar de estrategia y pasar a desarrollar la solución en Python, me tocó investigar conceptos técnicos que no habíamos visto en el curso:
 
-* **El Algoritmo de Regresión Lineal:** Entendí que no es magia negra, sino un algoritmo clásico que analiza variables numéricas de entrada y traza de forma automática una línea recta de tendencia para calcular el precio final de una casa. Conseguir un 64% de acierto (`R2 Score: 0.6401`) con un dataset real de más de 20.000 viviendas demuestra que los datos tienen una lógica interna que la IA puede aprender rápidamente.
-* **Métricas de Evaluación:** Para saber si el modelo funcionaba bien o mal, investigué qué significaban el Error Cuadrático Medio (MSE), que calcula la media de los fallos elevados al cuadrado, y el Coeficiente de Determinación (R2 Score), que funciona como la nota del examen del algoritmo. 
+* **El Algoritmo de Regresión Lineal:** Tuve que aprender cómo funciona este modelo clásico. Entendí que no es magia negra, sino un algoritmo que analiza variables numéricas de entrada (ingresos, habitaciones, ubicación) y traza de forma automática una línea recta de tendencia para calcular el precio final de una casa.
+* **Métricas de Evaluación:** Para saber si el modelo funcionaba bien o mal, investigué qué significaban el Error Cuadrático Medio (MSE), que calcula la media de los fallos elevados al cuadrado, y el Coeficiente de Determinación (R2 Score), que funciona como la nota del examen del algoritmo. Descubrir que mi modelo sacó un 0.6401 (un 64% de acierto general) me ayudó a entender cómo validar la calidad de una Inteligencia Artificial.
 * **Ecosistema de Librerías de Python:** Al venir de programar en Java, tuve que investigar herramientas nuevas de análisis de datos como `pandas` (para limpiar celdas vacías mediante `dropna()`), `seaborn` y `matplotlib` (para las gráficas) y `scikit-learn` (para instanciar el modelo como un objeto y usar métodos como `.fit()` y `.predict()`).
 
 ### 3. Limitaciones del Modelo Técnico
@@ -204,3 +194,12 @@ Si tuviéramos que implantar este sistema en una empresa inmobiliaria real, su a
 * **Filtro Rápido de Oportunidades (Inversión):** El departamento de compras podría programar este script para escanear de forma automática portales inmobiliarios. Si el sistema detecta un piso cuyo precio de venta real está muy por debajo del precio que predice nuestro modelo, saltaría una alerta automática para adquirir una propiedad infravalorada antes que la competencia.
 * **Tasación Automatizada para Captación de Clientes:** Se podría integrar este código detrás de una API web en la página de la inmobiliaria. De este modo, un usuario de la calle podría rellenar un formulario con los datos de su casa y el sistema le devolvería una tasación inicial aproximada en segundos, capturando un cliente potencial para la empresa de forma automatizada gracias a la infraestructura cloud.
 
+---
+
+## Próximos Pasos (Lo que se viene este verano)
+
+El motor de predicción en el Jupyter Notebook ya funciona perfectamente. Como el objetivo es seguir aprendiendo y llevar este proyecto al siguiente nivel, estas son las mejoras en las que estoy trabajando:
+
+* **Crear un Bot de Telegram:** Quiero que cualquiera pueda usar el modelo desde el móvil. La idea es pasarle los datos de una casa por el chat y que el bot te devuelva el precio estimado al instante.
+* **Limpiar y organizar el código:** Pasar la lógica del Notebook a archivos limpios de Python (`.py`) y guardar el modelo ya entrenado en un archivo para que el bot lo cargue superrápido sin tener que reentrenarlo cada vez.
+* **Montarlo en un servidor (Linux):** Desplegar el script del bot en un servidor para que se quede corriendo en segundo plano y funcione las 24 horas del día, aplicando buenas prácticas para ocultar las claves de la API de Telegram de forma segura.
