@@ -19,11 +19,12 @@ Para realizar este proyecto he trabajado en la nube de Amazon Web Services (AWS)
 
 ## Cómo ejecutarlo localmente
 
-git clone https://github.com/edgarfariza/AI-Real-State-Agent.git
+```bash
+git clone [https://github.com/edgarfariza/AI-Real-State-Agent.git](https://github.com/edgarfariza/AI-Real-State-Agent.git)
 cd AI-Real-State-Agent
 pip install -r requirements.txt
 jupyter notebook notebook/prediccion_viviendas.ipynb
-
+```
 ## El Problema de Negocio (Sector Inmobiliario)
 
 El ejercicio se basa en un caso real del sector inmobiliario. Contamos con una tabla de datos (dataset) que incluye información de muchas viviendas: su ubicación por coordenadas, la antigüedad del edificio, el número de habitaciones, los dormitorios y el nivel económico de los vecinos de la zona. 
