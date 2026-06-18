@@ -64,3 +64,30 @@ plt.title('Matriz de Correlación - Dataset Oficial de AWS')
 plt.show()
 ```
 ![Matriz de Correlación](img/02-grafico-dataset.png)
+
+### 3. Entrenamiento del Modelo de Predicción
+Para poder entrenar al sistema, primero tuve que hacer una pequeña limpieza en la tabla de datos. Eliminé las filas que tenían celdas vacías en la columna de los dormitorios (`total_bedrooms`) para evitar que el código diera errores de compilación. Además, quité la columna `ocean_proximity` porque contiene texto (como "NEAR BAY") y los modelos predictivos solo entienden de números.
+
+Después, separé los datos en dos grupos: utilicé el 80% de las casas para que el algoritmo estudiara las características y aprendiera los precios, y me guardé el 20% restante bloqueado para poder hacerle un examen final al sistema más adelante. 
+
+Para este proyecto utilicé un algoritmo clásico llamado **Regresión Lineal**. Básicamente, lo que hace este algoritmo es analizar todas las variables numéricas de entrada (los ingresos de la zona, las habitaciones, la antigüedad...) y trazar una línea de tendencia recta para calcular de forma automatizada el precio final de la vivienda (`median_house_value`). A nivel de código, es programación pura orientada a objetos: instanciamos un objeto de la clase `LinearRegression` y llamamos a su método `.fit()` pasándole los datos de entrenamiento por parámetro.
+
+```python
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+
+# 1. Limpiamos las celdas vacías para evitar fallos
+df_clean = df.dropna()
+
+# 2. Separamos las columnas de datos del precio final
+X = df_clean.drop(columns=['median_house_value', 'ocean_proximity'])
+y = df_clean['median_house_value']
+
+# 3. Dividimos en grupo de estudio (80%) y grupo de examen (20%)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# 4. Ponemos al algoritmo a estudiar los datos
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+print("¡Modelo entrenado con éxito usando los datos del taller!")
