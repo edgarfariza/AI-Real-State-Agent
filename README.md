@@ -17,7 +17,7 @@ Para realizar este proyecto he trabajado en la nube de Amazon Web Services (AWS)
 
 * **Amazon SageMaker:** La plataforma principal de AWS para trabajar con Inteligencia Artificial y modelos predictivos.
 * **Instancias de Cuaderno (Notebook Instances):** Servidores virtuales dedicados que permiten abrir el entorno JupyterLab para escribir e instalar scripts en Python de forma aislada y segura.
-* **Amazon S3:** El servicio de almacenamiento en la nube donde se guardan los archivos de datos utilizados.
+* **Almacenamiento Local del Servidor:** El dataset y los archivos de datos se gestionan directamente dentro del almacenamiento local asignado a la instancia, listos para su procesamiento directo.
 
 ---
 
