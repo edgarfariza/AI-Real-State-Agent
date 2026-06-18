@@ -20,7 +20,7 @@ Para realizar este proyecto he trabajado en la nube de Amazon Web Services (AWS)
 ## Cómo ejecutarlo localmente
 
 ```bash
-git clone [https://github.com/edgarfariza/AI-Real-State-Agent.git](https://github.com/edgarfariza/AI-Real-State-Agent.git)
+git clone https://github.com/edgarfariza/AI-Real-State-Agent.git
 cd AI-Real-State-Agent
 pip install -r requirements.txt
 jupyter notebook notebook/prediccion_viviendas.ipynb
