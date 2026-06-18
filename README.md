@@ -63,7 +63,7 @@ sns.heatmap(df.corr(numeric_only=True), annot=True, cmap='Dark2', fmt='.2f')
 plt.title('Matriz de Correlación - Dataset Oficial de AWS')
 plt.show()
 ```
-![Matriz de Correlación](img/02-grafico-dataset.png)
+![Gráfico Dataset](img/02-grafico-dataset.png)
 
 ### 3. Entrenamiento del Modelo de Predicción
 Para poder entrenar al sistema, primero tuve que hacer una pequeña limpieza en la tabla de datos. Eliminé las filas que tenían celdas vacías en la columna de los dormitorios (`total_bedrooms`) para evitar que el código diera errores de compilación. Además, quité la columna `ocean_proximity` porque contiene texto (como "NEAR BAY") y los modelos predictivos solo entienden de números.
@@ -111,5 +111,32 @@ r2 = r2_score(y_test, y_pred)
 print(f"Error Cuadrático Medio (MSE): {mse:.4f}")
 print(f"Porcentaje de acierto o Coeficiente (R2 Score): {r2:.4f}")
 ```
-![Matriz de Correlación](img/03-resultado-examen.png)
+![Resultado Examen](img/03-resultado-examen.png)
+
+### 5. Análisis Gráfico de los Resultados
+Para ir más allá de los números y entender visualmente cómo se comporta el modelo, generé dos gráficas adicionales en el cuaderno que muestran de forma muy clara dónde acierta el algoritmo y cómo se distribuyen sus fallos.
+
+```python
+# Creamos una pantalla con dos gráficas paralelas
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6))
+
+# Gráfica 1: Precios Reales vs Predicciones
+ax1.scatter(y_test, y_pred, alpha=0.3, color='teal')
+ax1.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'r--', lw=2)
+ax1.set_xlabel('Precios Reales del Mercado')
+ax1.set_ylabel('Precios Predictivos del Modelo')
+ax1.set_title('Comparativa: Realidad vs Predicción')
+
+# Gráfica 2: Distribución de los Errores (Residuos)
+errores = y_test - y_pred
+sns.histplot(errores, kde=True, ax=ax2, color='purple')
+ax2.axvline(x=0, color='r', linestyle='--')
+ax2.set_xlabel('Tamaño del Error')
+ax2.set_ylabel('Cantidad de Casas')
+ax2.set_title('Distribución de los Errores del Modelo')
+
+plt.tight_layout()
+plt.show()
+```
+![Análisis Gráfico de los Resultados](img/04-graficas-analisis.png)
 
