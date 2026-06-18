@@ -36,7 +36,7 @@ Tener un modelo que calcule los precios de forma automática permite a una inmob
 ### 1. Bloqueo de Permisos y Cambio de Estrategia
 Al intentar abrir la herramienta visual SageMaker Canvas dentro del laboratorio de la universidad, el sistema me denegó el acceso con un error de tipo `AccessDeniedException`. Esto ocurrió porque las cuentas de estudiante vienen muy limitadas de fábrica y no tienen permisos para activar ciertas opciones de usuario en AWS (como el Identity Center o el Resource Access Manager).
 
-![AccesDeniedException1](img/AccesssDeniedException.png)
+![AccessDeniedException1](img/AccesssDeniedException.png)
 ![AccessDeniedException2](img/AccessDeniedException2.png)
 
 Como no podía cambiar los permisos de la cuenta, decidí solucionar el problema como programador: en lugar de usar la interfaz visual sin código, creé una **Instancia de Cuaderno tradicional (Notebook Instance)** de tipo `ml.t3.medium` usando el rol con los permisos que ya venían configurados en el laboratorio (`LabRole`). Esta vía trabaja de forma independiente, esquiva el bloqueo y me permitió continuar con el proyecto escribiendo el código yo mismo.
