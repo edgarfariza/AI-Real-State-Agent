@@ -140,3 +140,13 @@ plt.show()
 ```
 ![Análisis Gráfico de los Resultados](img/04-graficas-analisis.png)
 
+Gráfica 1: Comparativa de Realidad vs Predicción.
+
+Esta gráfica nos representa cada casa del grupo del examen con un punto azul. La linea roja discontinua representa la franja donde el precio real y el precio adivinado coinciden exactamente.
+Al ver que la nube de puntos azules se agrupa siguiendo la dirección de la línea roja, confirmamos visualmente que el modelo sigue la tendencia real del mercado. Si los puntos estuvieran completamente dispersos como una diana rota, significaría que el modelo estaría calculando los precios al azar.
+
+Gráfica 2: Distribución de los Errores
+Esta gráfica nos muestra cuanto se desvían las predicciones del modelo respecto a la línea roja discontinua central, que representa el cero.
+La gráfica tiene forma de campana y la mayoría de los datos se concentran alrededor de la línea central. Esto es una excelente señal técnica, ya que demuestra que la gran mayoría de los errores del algoritmo son pequeños (cercanos a cero) y que el modelo no tiene un sesgo grave que le haga calcular siempre los precios al alza o a la baja.
+
+
