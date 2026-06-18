@@ -110,3 +110,6 @@ r2 = r2_score(y_test, y_pred)
 
 print(f"Error Cuadrático Medio (MSE): {mse:.4f}")
 print(f"Porcentaje de acierto o Coeficiente (R2 Score): {r2:.4f}")
+```
+![Matriz de Correlación](img/03-resultado-examen.png)
+
