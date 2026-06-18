@@ -149,6 +149,16 @@ Al ver que la nube de puntos azules se agrupa siguiendo la dirección de la lín
 Esta gráfica nos muestra cuanto se desvían las predicciones del modelo respecto a la línea roja discontinua central, que representa el cero.
 La gráfica tiene forma de campana y la mayoría de los datos se concentran alrededor de la línea central. Esto es una excelente señal técnica, ya que demuestra que la gran mayoría de los errores del algoritmo son pequeños (cercanos a cero) y que el modelo no tiene un sesgo grave que le haga calcular siempre los precios al alza o a la baja.
 
+## Limpieza de la Cuenta
+
+Para cumplir con las buenas prácticas de administración en la nube, optimizar el uso de los recursos y evitar consumir créditos del laboratorio de forma innecesaria, he procedido a apagar la infraestructura utilizada una vez terminado el ejercicio:
+
+1. Guardé los cambios del cuaderno `.ipynb` y cerré el entorno de JupyterLab.
+2. Volví al panel de control de Amazon SageMaker, seleccioné mi instancia de cuaderno (`sagemaker-realestate-efac`) y utilicé el botón **Acciones -> Detener (Stop)**.
+3. Confirmé que el estado de la máquina cambió de `InService` a `Stopped`, garantizando así el coste cero en la cuenta del laboratorio tras la realización de las capturas de pantalla de este proyecto.
+
+![Instancia del cuaderno parada](img/05-instancia-stopped.png)
+
 ## Reflexión Final y Aprendizajes
 
 ### 1. Limitaciones de las Herramientas Visuales
